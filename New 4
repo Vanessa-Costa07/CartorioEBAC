@@ -1,0 +1,148 @@
+#include <stdio.h> // Biblioteca de comunicação com o usuário
+#include <stdlib.h> // Biblioteca de alocação de espaço em memória
+#include <locale.h> // Biblioteca de alocações de texto por região
+#include <string.h> // Biblioteca responsável por cuidar das strings
+
+int registro() // Função responsável por cadastrar os usuários no sistema
+{    
+    // Início criação de variáveis/strings
+    char arquivo[40];
+    char cpf[40];
+    char nome[40];
+    char sobrenome[40];
+    char carga[40];
+    // Final da criação de variáveis/strings
+    
+    printf("Digite o CPF a ser cadastrado: "); // Coletando informações do usuário
+    scanf("%s", cpf); // %s refere-se ao tipo string
+    
+    strcpy(arquivo, cpf); // Responsável por copiar o CPF para o nome do arquivo
+    
+    FILE *file; // Cria o arquivo
+    file = fopen(arquivo, "w"); // Cria o arquivo com o nome do CPF
+    fprintf(file, "%s", cpf); // Salva o valor do CPF no arquivo
+    fclose(file); // Fecha o arquivo
+    
+    file = fopen(arquivo, "a");
+    fprintf(file, ",");
+    fclose(file);
+    
+    printf("Digite o nome a ser cadastrado: ");
+    scanf("%s", nome);
+    
+    file = fopen(arquivo, "a");
+    fprintf(file, "%s", nome);
+    fclose(file);
+
+    file = fopen(arquivo, "a");
+    fprintf(file, ",");
+    fclose(file);
+
+    printf("Digite o sobrenome a ser cadastrado: ");
+    scanf("%s", sobrenome);
+
+    file = fopen(arquivo, "a");
+    fprintf(file, "%s", sobrenome);
+    fclose(file);
+
+    file = fopen(arquivo, "a");
+    fprintf(file, ",");
+    fclose(file);
+
+    printf("Digite a carga a ser cadastrada: ");
+    scanf("%s", carga);
+
+    file = fopen(arquivo, "a");
+    fprintf(file, "%s", carga);
+    fclose(file);
+    
+    system("pause"); // Corrigido com ponto e vírgula
+}
+
+int consulta()
+{
+    setlocale(LC_ALL, "Portuguese"); // Definindo a linguagem
+
+    char cpf[40];
+    char conteudo[200];
+
+    printf("Digite o CPF a ser consultado: ");
+    scanf("%s", cpf);
+    
+    FILE *file; // Declarando o ponteiro para arquivo
+    file = fopen(cpf, "r"); // Abre o arquivo com o nome do CPF
+    
+    if (file == NULL)
+    {
+        printf("Não foi possível abrir o arquivo, não localizado!\n");
+        system("pause");
+        return 0; // Retorna 0 caso não consiga abrir o arquivo
+    }
+
+    while (fgets(conteudo, 200, file) != NULL)
+    {
+        printf("Essas são as informações do usuário:\n");
+        printf("%s", conteudo); // Corrigido: faltava o `,` para imprimir a variável
+        printf("\n\n");
+    }
+    
+    fclose(file); // Fechar o arquivo após a leitura
+    system("pause");
+}
+
+int deletar()
+{
+    printf("Você escolheu deletar nomes!\n");
+    system("pause");
+}
+
+int main()
+{
+    int opcao = 0; // Definindo variáveis
+    int laco = 1;
+
+    // Corrigido para loop infinito com 'while(1)'
+    while (1)
+    {
+        system("cls");
+
+        setlocale(LC_ALL, "Portuguese"); // Definindo a linguagem
+
+        printf("### Cartório da EBAC ###\n\n"); // Início do menu
+        printf("Escolha a opção desejada do menu:\n\n");
+        printf("\t1 - Registrar nomes\n");
+        printf("\t2 - Consultar nomes\n");
+        printf("\t3 - Deletar nomes\n\n");
+        printf("\t4 - Sair do sistema\n\n");
+        printf("Opção: "); // Fim do menu
+    
+        scanf("%d", &opcao); // Armazenando a escolha do usuário
+    
+        system("cls");
+    
+        switch (opcao) // Início da seleção
+        {
+            case 1:
+                registro();
+                break;
+                
+            case 2:
+                consulta();
+                break;
+                
+            case 3:
+                deletar();
+                break;
+                
+            case 4:
+                printf("Obrigado por utilizar o sistema!\n");
+                return 0;
+                break;
+                
+            default:
+                printf("Essa opção não está disponível!\n");
+                system("pause");
+                break;
+        }
+    }
+}
